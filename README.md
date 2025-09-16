@@ -136,6 +136,7 @@ list members
 [Official Docs Here](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire-management-console/1-4/gf-mc/index.html) (for reference)
 
 Simple Lab Instructions:
+> Note: We already set the docker-registry image-pull-secret above.  If you have not done that or are using a different namespace make sure to set it here.
 1. Create the TGF Management Console instance (uses [tgfmgmt.yaml](tgfmgmt.yaml). Take a look!)
 ```shell
 kubectl create -f tgfmgmt.yaml -n tgf
