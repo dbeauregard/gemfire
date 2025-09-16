@@ -44,7 +44,7 @@ export TGF_REPO_PASSWORD='****'
 ```shell
 kind create cluster
 ```
-2. Kind will set the correct K8s context for you
+ - Kind will set the correct K8s context for you
 2. Validate K8s is up and running 
 ```shell
 kubectl get nodes
@@ -92,7 +92,7 @@ kubectl get po -n tgf #add ‘-w’ to watch
 5. Clone this Git Repository
 ```shell
 git clone https://github.com/dbeauregard/gemfire-k8s.git
-cd gemfire
+cd gemfire-k8s
 ```
 3. Create the GemFire Cluster (uses [gemfire1.yaml](gemfire1.yaml). Take a look!)
 ```shell
