@@ -1,8 +1,8 @@
-# GemFire on K8s
-Instructions to run GemFire (TGF) in Kubernetes (K8s).  We will be deploying TGF to K8s locally on your laptop using the TGF Operator which, by default, deploys one locator and two servers.  Any compliant K8s distribution should work for this (e.g., Kind, MiniKube, Colima, etc).  I have tested this with a Kind Cluster, running on Docker, on my ARM based MacBook Pro.
+# Tanzu GemFire on Kubernetes
+Instructions to run Tanzu GemFire (TGF) in Kubernetes (K8s).  We will be deploying TGF to K8s locally on your laptop using the TGF Operator which, by default, deploys one locator and two servers.  Any compliant K8s distribution should work for this (e.g., Kind, MiniKube, Colima, etc).  This lab has been tested with a Kind Cluster running in Docker Desktop on Apple Silicon (ARM-based) Apple MacBook Pro.
 
 # Mac/OSX Setup
-The below will work on both ARM and Intel based Macs.  It should also work on Linux or a K8s cluster on Windows but some modifications to the prerequisits or commands may be required.  Also, if you have a K8s deployment running elsewhere (e.g., in a lab) you can use that instead of a local deployment.
+The below will work on both ARM and Intel-based Macs.  It should also work on Linux or a K8s cluster on Windows but some modifications to the prerequisits or commands may be required.  Also, if you have a K8s deployment running elsewhere (e.g., in a lab) you can use that instead of a local deployment.
 
 ## Prerequisits
 1. Docker installed and running (e.g., Homebrew or [Docker Desktop](https://www.docker.com/products/docker-desktop/)) (podman *'should'* also work)
