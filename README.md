@@ -2,7 +2,7 @@
 Instructions to run GemFire (TGF) in Kubernetes (K8s).  We will be deploying TGF to K8s locally on your laptop using the TGF Operator which, by default, deploys one locator and two servers.  Any compliant K8s distribution should work for this (e.g., Kind, MiniKube, Colima, etc).  I have tested this with a Kind Cluster, running on Docker, on my ARM based MacBook Pro.
 
 # Mac/OSX Setup
-The below will work on both ARM and Intel based Macs.  Also, if you have a K8s deployment running elsewhere (e.g., in a lab) you can use that instead of a local deployment.
+The below will work on both ARM and Intel based Macs.  It should also work on Linux or a K8s cluster on Windows but some modifications to the prerequisits or commands may be required.  Also, if you have a K8s deployment running elsewhere (e.g., in a lab) you can use that instead of a local deployment.
 
 ## Prerequisits
 1. Docker installed and running (e.g., Homebrew or [Docker Desktop](https://www.docker.com/products/docker-desktop/)) (podman *'should'* also work)
@@ -25,7 +25,7 @@ brew install kubectx
 ## Export Your Repository Credentials
 1. Login to [support.broadcom.com](http://support.broadcom.com)
 2. Select 'My Downloads'
-3. Search for GemFire and Select ["VMware Tanzu GemFire"](https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Tanzu%20GemFire). (**Not** "VMware Tanzu GemFire on Kuberntes" [yes, seriously])
+3. Search for GemFire and Select ["VMware Tanzu GemFire"](https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Tanzu%20GemFire). (**Not** "VMware Tanzu GemFire on Kuberntes"; yes, seriously)
 4. Expand (click on the right arrow '**>**') "VMware Tanzu GemFire"
 5. Scroll down and click on the "Show All Releases" button
 6. Navigate to the row named "Click Green Token for Repository Access" and click on the green shield
@@ -102,24 +102,32 @@ kubectl create -f gemfire1.yaml -n tgf
 ```shell
 kubectl get pods -n tgf #add ‘-w’ to watch
 ```
-```shell
-kubectl describe pod <pod name> -n tgf
-```
-6. You can also watch the operator logs with `k logs gemfire-operator-controller-manager-<guid> -n tgf` (add ‘-f’ at the end to tail the logs) 
-7. Wait until the GemFire instance is ready (1/1 LOCATORS and 2/2 SERVERS)
+5. You can also watch the operator logs with `kubectl logs gemfire-operator-controller-manager-<guid> -n tgf` (add ‘-f’ at the end to tail the logs) 
+6. Wait until the GemFire instance is ready (1/1 LOCATORS and 2/2 SERVERS)
 ```shell
 kubectl get gemfireclusters -n tgf
 ```
 
-## Connect with GFSH
-1. Exec into the Locator Pod/Container:
+## Connect with GFSH CLI
+1. Get truststore/keystore credential (TLS_PASSWORD below)
 ```shell
-kubectl exec -it gemfire1-locator-0 -n tgf -- /bin/bash
-gfsh
+kubectl get secret gemfire1-cert -n tgf -o jsonpath='{.data.password}' | base64 -d #ignore any shell appended % signs
 ```
-2. Get the secret
-2. Connect with
-4. See [data.md](data.md) for more GFSH commands and a simple example
+2. Exec into the Locator Pod/Container:
+```shell
+kubectl exec -it gemfire1-locator-0 -n tgf -- gfsh
+```
+3. Connect to the TGF Cluster (in gfsh, run the following)
+```shell
+connect --locator=gemfire1-locator-0.gemfire1-locator.tgf.svc.cluster.local[10334] --trust-store=/certs/truststore.p12 --trust-store-password=TLS_PASSWORD --key-store=/certs/keystore.p12 --key-store-password=TLS_PASSWORD
+```
+    - accept the defaults for all the (5) prompts
+4. List the TGF Cluster Members (in gfsh, run the following)
+```shell
+list members
+```
+5. See [data.md](data.md) for more GFSH commands and a simple example
+6. Type `exit` to exit gfsh and the container
 
 ## Deploy the GemFire Management Console
 [Official Docs Here](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire-management-console/1-4/gf-mc/index.html) (for reference)
@@ -133,12 +141,6 @@ kubectl create -f tgfmgmt.yaml
 ```shell
 kubectl get pods -n gemfire-management-console
 ```
-4. Get  user credentials 
-   - The Username will be: “gpmon“
-   - For the Password run:
-    ```shell
-    kubectl get secret gpcc-cc-creds -n tgf -o jsonpath='{.data.*}' | base64 -d #ignore any shell appended % signs
-    ```
 5. Port-forward gpcc service to access gpcc locally 
 ```shell
 kubectl port-forward svc/gpcc-cc-svc -n gemfire-management-console 8080
