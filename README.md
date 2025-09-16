@@ -118,10 +118,10 @@ kubectl get secret gemfire1-cert -n tgf -o jsonpath='{.data.password}' | base64 
 kubectl exec -it gemfire1-locator-0 -n tgf -- gfsh
 ```
 3. Connect to the TGF Cluster (in gfsh, run the following)
-```shell
+```
 connect --locator=gemfire1-locator-0.gemfire1-locator.tgf.svc.cluster.local[10334] --trust-store=/certs/truststore.p12 --trust-store-password=TLS_PASSWORD --key-store=/certs/keystore.p12 --key-store-password=TLS_PASSWORD
 ```
-    - accept the defaults for all the (5) prompts
+ - Accept the defaults for all the (5) prompts
 4. List the TGF Cluster Members (in gfsh, run the following)
 ```shell
 list members
@@ -135,17 +135,19 @@ list members
 Simple Lab Instructions:
 1. Create the TGF Management Console instance (uses [tgfmgmt.yaml](tgfmgmt.yaml). Take a look!)
 ```shell
-kubectl create -f tgfmgmt.yaml
+kubectl create -f tgfmgmt.yaml -n tgf
 ```
-2. Check the pod status (is in the 'gemfire-management-console' namespace)
+2. Check the pod status and wait for it to be running
 ```shell
-kubectl get pods -n gemfire-management-console
+kubectl get pods -n tgf
 ```
-5. Port-forward gpcc service to access gpcc locally 
+3. Port-forward to the pod
 ```shell
-kubectl port-forward svc/gpcc-cc-svc -n gemfire-management-console 8080
+kubectl port-forward pod/gmc-0 -n tgf 8080
 ```
-6. In a browser navigate to the url http://127.0.0.1:8080 and login
+4. In a browser navigate to the url http://127.0.0.1:8080
+5. Leave "Management Login Security Provider" as "None" and click "Enable Developer Mode"
+6. Instructions to connect to the TGF Cluster coming soon
 
 ## Cleanup
 1. Stop Kind (pauses Kind and the K8s cluster; can be restarted later)

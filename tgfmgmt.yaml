@@ -1,16 +1,9 @@
 ---
 apiVersion: v1
-kind: Namespace
-metadata:
-  name: gemfire-management-console
-  labels:
-    name: gemfire-management-console
----
-apiVersion: v1
 kind: Service
 metadata:
   name: gmc-service
-  namespace: gemfire-management-console
+  namespace: tgf
 spec:
   selector:
     app: gmc
@@ -25,7 +18,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: gmc
-  namespace: gemfire-management-console
+  namespace: tgf
 spec:
   selector:
     matchLabels:
