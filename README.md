@@ -141,23 +141,23 @@ kubectl create -f tgfmgmt.yaml -n tgf
 ```shell
 kubectl get pods -n tgf
 ```
-3. Port-forward to the pod
-```shell
-kubectl port-forward pod/gmc-0 -n tgf 8080
-```
-4. Retrieve the keystore and truststore files from the locator
+3. Retrieve the keystore and truststore files from the locator
 ```shell
 kubectl -n tgf cp gemfire1-locator-0:/certs/..data/keystore.p12 ./keystore.p12
 kubectl -n tgf cp gemfire1-locator-0:/certs/..data/truststore.p12 ./truststore.p12
 ```
-5. Get truststore/keystore credential (TLS_PASSWORD below)
+4. Get truststore/keystore credential (same as above for GFSH)
 ```shell
 kubectl get secret gemfire1-cert -n tgf -o jsonpath='{.data.password}' | base64 -d #ignore any shell appended % signs
+```
+5. Port-forward to the pod
+```shell
+kubectl port-forward pod/gmc-0 -n tgf 8080
 ```
 6. In a browser navigate to the url http://127.0.0.1:8080
 7. Leave "Management Login Security Provider" as "None" and click "Enable Developer Mode"
 8. Connect Your Cluster
-   1. Select "Click here to start connecting clusters" from the main page, or 'Connect' from the menue
+   1. Select "Click here to start connecting clusters" from the main page, or "Connect" from the menue
    1. Enter 'gemfire1' for the Cluster Nickname
    1. Enter 'gemfire1-locator.tgf.svc.cluster.local' for the Host
    1. Enter '7070' for the Port
@@ -165,14 +165,13 @@ kubectl get secret gemfire1-cert -n tgf -o jsonpath='{.data.password}' | base64 
    1. Under TLS, check the box for 'Connect over TLS/SSL'
    1. For Keystore File, click the folder icon and select the keystore.p12 file you downloaded above
    1. For Keystore Password, use the credential you retrieved above
-   1. For Truststore File, click the folder icon and select the Truststore.p12 file you downloaded above
+   1. For Truststore File, click the folder icon and select the truststore.p12 file you downloaded above
    1. For Truststore Password, use the credential you retrieved above
-   1. Check the box for 'Select Save TLS Passwords'
+   1. Check the box for 'Save TLS Passwords'
    1. Select 'Connect Cluster'
 ![Connect Cluster](images/ConnectCluster.png)
-9. Click on the new cluster Nickname URL 'gemfire1' in the All Clusters page
+9. Click on the new cluster Nickname URL 'gemfire1' in the "All Clusters" page
 9. Have Fun Exploring
-
 
 ## Cleanup
 1. Stop Kind (pauses Kind and the K8s cluster; can be restarted later)
