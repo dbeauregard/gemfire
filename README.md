@@ -107,6 +107,7 @@ kubectl get pods -n tgf #add ‘-w’ to watch
 ```shell
 kubectl get gemfireclusters -n tgf
 ```
+![TGFK8s](images/TGFK8s.png)
 
 ## Connect with GFSH CLI
 1. Get truststore/keystore credential (TLS_PASSWORD below)
@@ -122,6 +123,8 @@ kubectl exec -it gemfire1-locator-0 -n tgf -- gfsh
 connect --locator=gemfire1-locator-0.gemfire1-locator.tgf.svc.cluster.local[10334] --trust-store=/certs/truststore.p12 --trust-store-password=TLS_PASSWORD --key-store=/certs/keystore.p12 --key-store-password=TLS_PASSWORD
 ```
  - Accept the defaults for all the (5) prompts
+
+![GFSH](images/GFSH.png)
 4. List the TGF Cluster Members (in gfsh, run the following)
 ```shell
 list members
