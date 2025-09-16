@@ -91,7 +91,7 @@ kubectl get po -n tgf #add ‘-w’ to watch
 ## Deploy TGF Cluster
 5. Clone this Git Repository
 ```shell
-git clone https://github.com/dbeauregard/gemfire.git
+git clone https://github.com/dbeauregard/gemfire-k8s.git
 cd gemfire
 ```
 3. Create the GemFire Cluster (uses [gemfire1.yaml](gemfire1.yaml). Take a look!)
